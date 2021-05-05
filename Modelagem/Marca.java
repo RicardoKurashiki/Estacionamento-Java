@@ -5,43 +5,47 @@ import java.util.ArrayList;
 public class Marca {
 
 	private String nome;
-	private ArrayList<Modelo> modelo;
+	private ArrayList<Modelo> alModelo;
 
 	// -> Método construtor sem nome
-	public Marca(){
+	public Marca() {
 		nome = "Sem marca";
-		modelo = new ArrayList<Modelo>();
+		alModelo = new ArrayList<Modelo>();
 	}
 
 	// -> Método construtor com nome
-	public Marca(String nome){
+	public Marca(String nome) {
 		this.nome = nome;
-		modelo = new ArrayList<Modelo>();
+		alModelo = new ArrayList<Modelo>();
 	}
 
 	// -> Colocar ou mudar o nome de uma marca
-	public void setMarca(String nome){
+	public void setMarca(String nome) {
 		this.nome = nome;
 	}
 
 	// -> Retorna nome da marca
-	public String getMarca(){
+	public String getMarca() {
 		return nome;
 	}
 
-	// -> Retorna o objeto da classe modelo de acordo com o índice
-	public Modelo getModelo(int index){
-		return modelo.get(index);
+	// -> Retorna o Array List da classe modelo
+	public ArrayList<Modelo> getALModelo() {
+		return alModelo;
 	}
 
-	// -> Adiciona modelos na marca com base nos nomes
-	public void addModeloNome(String nomeMod){
+	// -> Retorna o objeto da classe modelo de acordo com o índice
+	public Modelo getModelo(int index) {
+		return alModelo.get(index);
+	}
+
+	public void addModeloNome(String nomeMod) {
 		Modelo novoMod = new Modelo(nomeMod);
-		modelo.add(novoMod);
+		alModelo.add(novoMod);
 	}
 
 	// -> Adiciona modelos na marca com objetos de Modelo
-	public void addModelo(Modelo novoModelo){
-		modelo.add(novoModelo);
+	public void addModelo(Modelo novoModelo) {
+		alModelo.add(novoModelo);
 	}
 }
