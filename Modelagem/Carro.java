@@ -59,7 +59,19 @@ public class Carro {
 		this.entrada = LocalDateTime.of(ano, mes, dia, hora, minuto);
 	}
 
+	// -> Construtor com placa e instância da hora de entrada
+	public Carro(String placa, LocalDateTime entrada){
+		this.placa = placa;
+		this.modelo = new Modelo();
+		this.entrada = entrada;
+	}
 
+	// -> Construtor com placa e informações da hora de entrada
+	public Carro(String placa, int hora, int minuto, int dia, int mes, int ano){
+		this.placa = placa;
+		this.modelo = new Modelo();
+		this.entrada = LocalDateTime.of(ano, mes, dia, hora, minuto);
+	}
 
 	public float saidaCarro(){
 		// Estabelece o LocalDateTime saída como now()
