@@ -34,9 +34,14 @@ public class Marca {
 		return modelo.get(index);
 	}
 
-	// -> Adiciona modelos na marca
-	public void addModelo(String nomeMod){
+	// -> Adiciona modelos na marca com base nos nomes
+	public void addModeloNome(String nomeMod){
 		Modelo novoMod = new Modelo(nomeMod);
 		modelo.add(novoMod);
+	}
+
+	// -> Adiciona modelos na marca com objetos de Modelo
+	public void addModelo(Modelo novoModelo){
+		modelo.add(novoModelo);
 	}
 }

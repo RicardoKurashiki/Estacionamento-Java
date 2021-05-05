@@ -73,14 +73,27 @@ public class Carro {
 		this.entrada = LocalDateTime.of(ano, mes, dia, hora, minuto);
 	}
 
+	// -> Getter da placa
+	public String getPlaca(){
+		return placa;
+	}
+
+	public String getModelo(){
+		return modelo.getModelo();
+	}
+
 	public float saidaCarro(){
+		float valor = 0;
 		// Estabelece o LocalDateTime saída como now()
 		// Calcula valor com a diferença entre o tempo de registro e o tempo de saida
+		return valor;
 	}
 
 	public float saidaCarroHorario(){
+		float valor = 0;
 		// Estabelece o LocalDateTime saída com a data e horário passado pelo usuário
 		// Calcula valor com a diferença de entrada e saída;
+		return valor;
 	}
 
 }
