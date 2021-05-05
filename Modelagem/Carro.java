@@ -2,6 +2,8 @@ package Modelagem;
 
 import java.time.LocalDateTime;
 
+import static java.time.temporal.ChronoUnit.HOURS;
+
 public class Carro {
 
 	private Modelo modelo;
@@ -85,14 +87,32 @@ public class Carro {
 	public float saidaCarro(){
 		float valor = 0;
 		// Estabelece o LocalDateTime saída como now()
+		this.saida = LocalDateTime.now();
+		float horas = entrada.until(saida, HOURS);
+		if (horas <= 1){
+			valor = 10;
+		}
+		if (horas > 1){
+			horas -= 1;
+			float minutos = horas * 60;
+			valor = 10 + ((minutos/15)*2);
+		}
 		// Calcula valor com a diferença entre o tempo de registro e o tempo de saida
 		return valor;
 	}
 
-	public float saidaCarroHorario(){
+	public float saidaCarroHorario(int minuto, int hora, int dia, int mes, int ano){
 		float valor = 0;
-		// Estabelece o LocalDateTime saída com a data e horário passado pelo usuário
-		// Calcula valor com a diferença de entrada e saída;
+		this.saida = LocalDateTime.of(ano, mes, dia, hora, minuto);
+		float horas = entrada.until(saida, HOURS);
+		if (horas <= 1){
+			valor = 10;
+		}
+		if (horas > 1){
+			horas -= 1;
+			float minutos = horas * 60;
+			valor = 10 + ((minutos/15)*2);
+		}
 		return valor;
 	}
 
