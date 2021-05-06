@@ -39,6 +39,7 @@ public class Marca {
 		return alModelo.get(index);
 	}
 
+	// -> Adiciona modelos na marca com o nome dos modelos
 	public void addModeloNome(String nomeMod) {
 		Modelo novoMod = new Modelo(nomeMod);
 		alModelo.add(novoMod);

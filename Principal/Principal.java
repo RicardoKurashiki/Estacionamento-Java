@@ -23,6 +23,7 @@ public class Principal {
 		final Marca m1 = new Marca("Fiat");
 		final Marca m2 = new Marca("Renault");
 		final Marca m3 = new Marca("Chevrolet");
+		final Marca m4 = new Marca("BMW");
 
 		m1.addModeloNome("Uno");
 		m1.addModeloNome("Argo");
@@ -30,19 +31,23 @@ public class Principal {
 		m2.addModeloNome("Duster");
 		m3.addModeloNome("Camaro");
 		m3.addModeloNome("Cruze");
+		m3.addModelo(new Modelo("BMW 320i"));
 
 		marcas.add(m1);
 		marcas.add(m2);
 		marcas.add(m3);
+		marcas.add(m4);
 
 		// -> Carros
 		Carro c1 = new Carro(new Modelo("Argo"), "ARG-0001", LocalDateTime.of(2021, 5, 6, 9, 30));
 		Carro c2 = new Carro(new Modelo("Argo"), "ARG-0002");
 		Carro c3 = new Carro(new Modelo("Camaro"), "CAM-0001");
+		Carro c4 = new Carro("UNK-2041");
 
 		vagas[0] = c1;
 		vagas[1] = c2;
 		vagas[2] = c3;
+		vagas[4] = c4;
 
 		historico.add(c1);
 		historico.add(c2);
@@ -58,7 +63,7 @@ public class Principal {
 			switch (escolha) {
 				case 1:
 					// -> Entrada do carro
-					menuEntrada(vagas, historico);
+					menuEntrada(vagas, historico, marcas);
 					break;
 				case 2:
 					// -> Saida do carro
@@ -106,10 +111,11 @@ public class Principal {
 		return scanner.nextInt();
 	}
 
-	public static void menuEntrada(Carro[] vagas, ArrayList<Carro> historico) {
+	public static void menuEntrada(Carro[] vagas, ArrayList<Carro> historico, ArrayList<Marca> marcas) {
 		Scanner scanner = new Scanner(System.in);
 		int emptyVagas = 100;
 		int i = 0;
+		int posVazia = 0;
 		System.out.println("\n--- Entrada ---");
 		System.out.println("<1> Registrar entrada sem especificar horario");
 		System.out.println("<2> Registrar entrada especificando horario");
@@ -123,44 +129,134 @@ public class Principal {
 					i += 1;
 				}
 			}
+
+			for(int j = 0; vagas[j] != null; j+=1){
+				posVazia += 1;
+				System.out.println(posVazia);
+				j += 1;
+			}
+
 			System.out.println("\nTotal de vagas vazias: " + emptyVagas);
 			scanner.nextLine();
 			switch (opcao) {
 				case 1:
-					System.out.print("Placa do carro: ");
-					String placa = scanner.nextLine();
-					System.out.print("Modelo do carro: ");
-					String modelo = scanner.nextLine();
-					vagas[i] = new Carro(modelo, placa);
-					System.out.println("\nEntrada registrada!");
-					System.out.println("Placa do Carro: " + vagas[i].getPlaca());
-					System.out.println("Modelo do Carro: " + vagas[i].getModelo());
-					System.out.println("Hora de entrada: " + vagas[i].getHoraEntrada());
-					// TODO -> Pedir para criar modelo
-					historico.add(vagas[i]);
+					// Marca
+					System.out.println("\n--- Selecione a marca do carro ---");
+					for (Marca marca: marcas){
+						System.out.println("<"+ marcas.indexOf(marca) + "> " + marca.getMarca());
+					}
+					System.out.println("<" + marcas.size() + "> Adicionar nova marca");
+					System.out.println("\nEscolha uma opcao de marca:");
+					System.out.print(">> ");
+					int escMarca = scanner.nextInt();
+
+					if (escMarca == marcas.size()){
+						System.out.println("\nNome da marca a ser adicionada:");
+						System.out.print(">> ");
+						scanner.nextLine();
+						String nomeMar = scanner.nextLine();
+						marcas.add(new Marca(nomeMar));
+						System.out.println("\nMarca adicionada: " + nomeMar);
+					} else {
+						// Modelo
+						Marca marcaSel = marcas.get(escMarca);
+						ArrayList<Modelo> modelosMarca = marcaSel.getALModelo();
+
+						System.out.println("\n--- Selecione o modelo do carro ---");
+						for (Modelo modelo: modelosMarca){
+							System.out.println("<"+ modelosMarca.indexOf(modelo) + "> " + modelo.getModelo());
+						}
+						System.out.println("<" + modelosMarca.size() + "> Adicionar novo modelo");
+						System.out.println("\nEscolha uma opcao de modelo:");
+						System.out.print(">> ");
+						int escModelo = scanner.nextInt();
+
+						if (escModelo == modelosMarca.size()){
+							System.out.println("\nMarca: " + marcaSel.getMarca());
+							System.out.println("Nome do modelo a ser adicionado:");
+							System.out.print(">> ");
+							scanner.nextLine();
+							String nomeMod = scanner.nextLine();
+							marcaSel.addModeloNome(nomeMod);
+							System.out.println("\nModelo adicionado: " + nomeMod);
+						} else {
+							System.out.println("\n--- Digite a placa do carro ---");
+							System.out.print(">> ");
+							scanner.nextLine();
+							String placa = scanner.nextLine();
+							vagas[posVazia] = new Carro(modelosMarca.get(escModelo), placa);
+							System.out.println("\nEntrada registrada!");
+							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
+							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
+							System.out.println("Hora de entrada: " + vagas[posVazia].getHoraEntrada());
+							historico.add(vagas[posVazia]);
+						}
+					}
 					break;
 				case 2:
-					System.out.print("Placa do carro: ");
-					placa = scanner.nextLine();
-					System.out.print("Modelo do carro: ");
-					modelo = scanner.nextLine();
-					System.out.print("Dia: ");
-					int dia = scanner.nextInt();
-					System.out.print("Mês: ");
-					int mes = scanner.nextInt();
-					System.out.print("Ano: ");
-					int ano = scanner.nextInt();
-					System.out.print("Hora: ");
-					int hora = scanner.nextInt();
-					System.out.print("Minuto: ");
-					int minuto = scanner.nextInt();
-					vagas[i] = new Carro(modelo, placa, hora, minuto, dia, mes, ano);
-					System.out.println("\nEntrada registrada!");
-					System.out.println("Placa do Carro: " + vagas[i].getPlaca());
-					System.out.println("Modelo do Carro: " + vagas[i].getModelo());
-					System.out.println("Hora de entrada: " + vagas[i].getHoraEntrada());
-					// TODO -> Pedir para criar modelo
-					historico.add(vagas[i]);
+					// Marca
+					System.out.println("\n--- Selecione a marca do carro ---");
+					for (Marca marca: marcas){
+						System.out.println("<"+ marcas.indexOf(marca) + "> " + marca.getMarca());
+					}
+					System.out.println("<" + marcas.size() + "> Adicionar nova marca");
+					System.out.println("\nEscolha uma opcao de marca:");
+					System.out.print(">> ");
+					escMarca = scanner.nextInt();
+
+					if (escMarca == marcas.size()){
+						System.out.println("\nNome da marca a ser adicionada:");
+						System.out.print(">> ");
+						scanner.nextLine();
+						String nomeMar = scanner.nextLine();
+						marcas.add(new Marca(nomeMar));
+						System.out.println("\nMarca adicionada: " + nomeMar);
+					} else {
+						// Modelo
+						Marca marcaSel = marcas.get(escMarca);
+						ArrayList<Modelo> modelosMarca = marcaSel.getALModelo();
+
+						System.out.println("\n--- Selecione o modelo do carro ---");
+						for (Modelo modelo: modelosMarca){
+							System.out.println("<"+ modelosMarca.indexOf(modelo) + "> " + modelo.getModelo());
+						}
+						System.out.println("<" + modelosMarca.size() + "> Adicionar novo modelo");
+						System.out.println("\nEscolha uma opcao de modelo:");
+						System.out.print(">> ");
+						int escModelo = scanner.nextInt();
+
+						if (escModelo == modelosMarca.size()){
+							System.out.println("\nMarca: " + marcaSel.getMarca());
+							System.out.println("Nome do modelo a ser adicionado:");
+							System.out.print(">> ");
+							scanner.nextLine();
+							String nomeMod = scanner.nextLine();
+							marcaSel.addModeloNome(nomeMod);
+							System.out.println("\nModelo adicionado: " + nomeMod);
+						} else {
+							System.out.println("\n--- Digite a placa do carro ---");
+							System.out.print(">> ");
+							scanner.nextLine();
+							String placa = scanner.nextLine();
+							System.out.println("\n--- Digite o horário de entrada ---");
+							System.out.print("Dia: ");
+							int dia = scanner.nextInt();
+							System.out.print("Mês: ");
+							int mes = scanner.nextInt();
+							System.out.print("Ano: ");
+							int ano = scanner.nextInt();
+							System.out.print("Hora: ");
+							int hora = scanner.nextInt();
+							System.out.print("Minuto: ");
+							int minuto = scanner.nextInt();
+							vagas[posVazia] = new Carro(modelosMarca.get(escModelo), placa, hora, minuto, dia, mes, ano);
+							System.out.println("\nEntrada registrada!");
+							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
+							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
+							System.out.println("Hora de entrada: " + vagas[posVazia].getHoraEntrada());
+							historico.add(vagas[posVazia]);
+						}
+					}
 					break;
 				default:
 					System.out.println("Escolha invalida!");
@@ -258,7 +354,7 @@ public class Principal {
 		} else {
 
 			Marca marcaEsc = marcas.get(opcao);
-			modelos = marcas.get(opcao).getALModelo();
+			modelos = marcaEsc.getALModelo();
 
 			System.out.println("\nA marca selecionada foi: " + marcaEsc.getMarca());
 			System.out.println("Os modelos disponiveis no sistema sao:\n");
