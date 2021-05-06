@@ -1,6 +1,7 @@
 package Modelagem;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static java.time.temporal.ChronoUnit.*;
 
@@ -80,8 +81,14 @@ public class Carro {
 		return placa;
 	}
 
+	// -> Getter do modelo
 	public String getModelo() {
 		return modelo.getModelo();
+	}
+
+	// -> Getter da hora de entrada
+	public String getHoraEntrada() {
+		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, hh:mm"));
 	}
 
 	public float saidaCarro() {
