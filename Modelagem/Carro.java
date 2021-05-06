@@ -77,16 +77,17 @@ public class Carro {
 	}
 
 	// -> Setter de placa
-	public void setPlaca(String placaNova){
+	public void setPlaca(String placaNova) {
 		this.placa = placaNova;
 	}
+
 	// -> Getter da placa
 	public String getPlaca() {
 		return placa;
 	}
 
 	// -> Setter do modelo
-	public void setModelo(String setmodelo){
+	public void setModelo(String setmodelo) {
 		this.modelo = new Modelo(setmodelo);
 	}
 
@@ -96,12 +97,13 @@ public class Carro {
 	}
 
 	// -> Setter de hora de entrada
-	public void setHoraEntrada(int ano, int mes, int dia, int hora, int minuto){
+	public void setHoraEntrada(int ano, int mes, int dia, int hora, int minuto) {
 		this.entrada = LocalDateTime.of(ano, mes, dia, hora, minuto);
 	}
+
 	// -> Getter da hora de entrada
 	public String getHoraEntrada() {
-		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, hh:mm a"));
+		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm"));
 	}
 
 	public float saidaCarro() {
@@ -118,12 +120,13 @@ public class Carro {
 			valor = 10 + ((minutos / 15) * 2);
 		}
 		// Calcula valor com a diferença entre o tempo de registro e o tempo de saida
+		this.valor = valor;
 		return valor;
 	}
 
-	public float saidaCarroHorario(int minuto, int hora, int dia, int mes, int ano) {
+	public float saidaCarroHorario(LocalDateTime data) {
 		float valor = 0;
-		this.saida = LocalDateTime.of(ano, mes, dia, hora, minuto);
+		this.saida = data;
 		long periodo = entrada.until(saida, MINUTES);
 		if (periodo <= 60) {
 			valor = 10;
@@ -132,7 +135,20 @@ public class Carro {
 			periodo -= 60;
 			valor = 10 + ((periodo / 15) * 2);
 		}
+		this.valor = valor;
 		return valor;
+	}
+
+	public LocalDateTime getHoraSaida() {
+		return saida;
+	}
+
+	public float getValor() {
+		return valor;
+	}
+
+	public boolean temHoraSaida() {
+		return (saida != null);
 	}
 
 }

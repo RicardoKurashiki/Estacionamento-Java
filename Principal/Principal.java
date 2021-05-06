@@ -2,7 +2,10 @@ package Principal;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 import Modelagem.Carro;
 import Modelagem.Marca;
@@ -39,19 +42,23 @@ public class Principal {
 		marcas.add(m4);
 
 		// -> Carros
-		Carro c1 = new Carro(new Modelo("Argo"), "ARG-0001", LocalDateTime.of(2021, 5, 6, 9, 30));
+		Carro c1 = new Carro(new Modelo("Argo"), "ARG-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		c1.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 12, 30));
 		Carro c2 = new Carro(new Modelo("Argo"), "ARG-0002");
 		Carro c3 = new Carro(new Modelo("Camaro"), "CAM-0001");
-		Carro c4 = new Carro("UNK-2041");
+		Carro c4 = new Carro(new Modelo("Kwid"), "KWD-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		c4.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 13, 30));
+		Carro c5 = new Carro(new Modelo("Duster"), "DTR-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		c5.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 14, 30));
+		Carro c6 = new Carro(new Modelo("Cruze"), "CRZ-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		c6.saidaCarroHorario(LocalDateTime.of(2021, 05, 04, 15, 30));
 
 		vagas[0] = c1;
 		vagas[1] = c2;
 		vagas[2] = c3;
-		vagas[4] = c4;
-
-		historico.add(c1);
-		historico.add(c2);
-		historico.add(c3);
+		vagas[3] = c4;
+		vagas[4] = c5;
+		vagas[5] = c6;
 
 		// -> Criacao de variaveis
 		boolean appOn = true;
@@ -79,7 +86,7 @@ public class Principal {
 					break;
 				case 5:
 					// -> Historico
-					verHistorico(historico);
+					verHistorico(vagas, historico);
 					break;
 				case 6:
 					// -> Mudar informações de algum carro
@@ -113,6 +120,7 @@ public class Principal {
 
 	public static void menuEntrada(Carro[] vagas, ArrayList<Carro> historico, ArrayList<Marca> marcas) {
 		Scanner scanner = new Scanner(System.in);
+		int dia, mes, ano, hora, minuto;
 		int emptyVagas = 100;
 		int i = 0;
 		int posVazia = 0;
@@ -130,7 +138,7 @@ public class Principal {
 				}
 			}
 
-			for(int j = 0; vagas[j] != null; j+=1){
+			for (int j = 0; vagas[j] != null; j += 1) {
 				posVazia += 1;
 			}
 
@@ -140,15 +148,15 @@ public class Principal {
 				case 1:
 					// Marca
 					System.out.println("\n--- Selecione a marca do carro ---");
-					for (Marca marca: marcas){
-						System.out.println("<"+ marcas.indexOf(marca) + "> " + marca.getMarca());
+					for (Marca marca : marcas) {
+						System.out.println("<" + marcas.indexOf(marca) + "> " + marca.getMarca());
 					}
 					System.out.println("<" + marcas.size() + "> Adicionar nova marca");
 					System.out.println("\nEscolha uma opcao de marca:");
 					System.out.print(">> ");
 					int escMarca = scanner.nextInt();
 
-					if (escMarca == marcas.size()){
+					if (escMarca == marcas.size()) {
 						System.out.println("\nNome da marca a ser adicionada:");
 						System.out.print(">> ");
 						scanner.nextLine();
@@ -161,15 +169,15 @@ public class Principal {
 						ArrayList<Modelo> modelosMarca = marcaSel.getALModelo();
 
 						System.out.println("\n--- Selecione o modelo do carro ---");
-						for (Modelo modelo: modelosMarca){
-							System.out.println("<"+ modelosMarca.indexOf(modelo) + "> " + modelo.getModelo());
+						for (Modelo modelo : modelosMarca) {
+							System.out.println("<" + modelosMarca.indexOf(modelo) + "> " + modelo.getModelo());
 						}
 						System.out.println("<" + modelosMarca.size() + "> Adicionar novo modelo");
 						System.out.println("\nEscolha uma opcao de modelo:");
 						System.out.print(">> ");
 						int escModelo = scanner.nextInt();
 
-						if (escModelo == modelosMarca.size()){
+						if (escModelo == modelosMarca.size()) {
 							System.out.println("\nMarca: " + marcaSel.getMarca());
 							System.out.println("Nome do modelo a ser adicionado:");
 							System.out.print(">> ");
@@ -188,22 +196,22 @@ public class Principal {
 							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
 							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
 							System.out.println("Hora de entrada: " + vagas[posVazia].getHoraEntrada());
-							historico.add(vagas[posVazia]);
+							// historico.add(vagas[posVazia]);
 						}
 					}
 					break;
 				case 2:
 					// Marca
 					System.out.println("\n--- Selecione a marca do carro ---");
-					for (Marca marca: marcas){
-						System.out.println("<"+ marcas.indexOf(marca) + "> " + marca.getMarca());
+					for (Marca marca : marcas) {
+						System.out.println("<" + marcas.indexOf(marca) + "> " + marca.getMarca());
 					}
 					System.out.println("<" + marcas.size() + "> Adicionar nova marca");
 					System.out.println("\nEscolha uma opcao de marca:");
 					System.out.print(">> ");
 					escMarca = scanner.nextInt();
 
-					if (escMarca == marcas.size()){
+					if (escMarca == marcas.size()) {
 						System.out.println("\nNome da marca a ser adicionada:");
 						System.out.print(">> ");
 						scanner.nextLine();
@@ -216,15 +224,15 @@ public class Principal {
 						ArrayList<Modelo> modelosMarca = marcaSel.getALModelo();
 
 						System.out.println("\n--- Selecione o modelo do carro ---");
-						for (Modelo modelo: modelosMarca){
-							System.out.println("<"+ modelosMarca.indexOf(modelo) + "> " + modelo.getModelo());
+						for (Modelo modelo : modelosMarca) {
+							System.out.println("<" + modelosMarca.indexOf(modelo) + "> " + modelo.getModelo());
 						}
 						System.out.println("<" + modelosMarca.size() + "> Adicionar novo modelo");
 						System.out.println("\nEscolha uma opcao de modelo:");
 						System.out.print(">> ");
 						int escModelo = scanner.nextInt();
 
-						if (escModelo == modelosMarca.size()){
+						if (escModelo == modelosMarca.size()) {
 							System.out.println("\nMarca: " + marcaSel.getMarca());
 							System.out.println("Nome do modelo a ser adicionado:");
 							System.out.print(">> ");
@@ -239,17 +247,19 @@ public class Principal {
 							scanner.nextLine();
 							String placa = scanner.nextLine();
 							System.out.println("\n--- Digite o horário de entrada ---");
-							System.out.print("Dia: ");
-							int dia = scanner.nextInt();
-							System.out.print("Mês: ");
-							int mes = scanner.nextInt();
-							System.out.print("Ano: ");
-							int ano = scanner.nextInt();
-							System.out.print("Hora: ");
-							int hora = scanner.nextInt();
-							System.out.print("Minuto: ");
-							int minuto = scanner.nextInt();
-							vagas[posVazia] = new Carro(modelosMarca.get(escModelo), placa, hora, minuto, dia, mes, ano);
+							System.out.print("Dia (dia/mes/ano): ");
+							String diaInteiro = scanner.nextLine();
+							System.out.print("Horario (hora:minuto - 24h): ");
+							String horaInteira = scanner.nextLine();
+							String[] valoresDia = diaInteiro.split("/");
+							String[] valoresHora = horaInteira.split(":");
+							dia = Integer.parseInt(valoresDia[0]);
+							mes = Integer.parseInt(valoresDia[1]);
+							ano = Integer.parseInt(valoresDia[2]);
+							hora = Integer.parseInt(valoresHora[0]);
+							minuto = Integer.parseInt(valoresHora[1]);
+							LocalDateTime data = LocalDateTime.of(ano, mes, dia, hora, minuto);
+							vagas[posVazia] = new Carro(modelosMarca.get(escModelo), placa, data);
 							System.out.println("\nEntrada registrada!");
 							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
 							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
@@ -269,12 +279,14 @@ public class Principal {
 
 	public static void menuSaida(Carro[] vagas) {
 		Scanner scanner = new Scanner(System.in);
+		int dia, mes, ano, hora, minuto;
 
 		System.out.println("\n--- Selecionar Carro ---");
 
-		for(int i = 0; i<100; i++){
-			if(vagas[i] != null){
-				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - " + vagas[i].getHoraEntrada());
+		for (int i = 0; i < 100; i++) {
+			if (vagas[i] != null) {
+				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - "
+						+ vagas[i].getHoraEntrada());
 			}
 		}
 
@@ -289,7 +301,7 @@ public class Principal {
 		System.out.println("\nEscolha uma opção: ");
 		System.out.print(">> ");
 		int escolhaHorario = scanner.nextInt();
-
+		scanner.nextLine();
 		if (escolhaHorario != 0) {
 			switch (escolhaHorario) {
 				case 1:
@@ -299,18 +311,20 @@ public class Principal {
 					break;
 				case 2:
 					System.out.println("\nEspecifique o horário:");
-					System.out.print("Dia: ");
-					int dia = scanner.nextInt();
-					System.out.print("Mês: ");
-					int mes = scanner.nextInt();
-					System.out.print("Ano: ");
-					int ano = scanner.nextInt();
-					System.out.print("Hora: ");
-					int hora = scanner.nextInt();
-					System.out.print("Minuto: ");
-					int minuto = scanner.nextInt();
+					System.out.print("Dia (dia/mes/ano): ");
+					String diaInteiro = scanner.nextLine();
+					System.out.print("Horario (hora:minuto - 24h): ");
+					String horaInteira = scanner.nextLine();
+					String[] valoresDia = diaInteiro.split("/");
+					String[] valoresHora = horaInteira.split(":");
+					dia = Integer.parseInt(valoresDia[0]);
+					mes = Integer.parseInt(valoresDia[1]);
+					ano = Integer.parseInt(valoresDia[2]);
+					hora = Integer.parseInt(valoresHora[0]);
+					minuto = Integer.parseInt(valoresHora[1]);
+					LocalDateTime data = LocalDateTime.of(ano, mes, dia, hora, minuto);
 					System.out.println("\nCarro removido com sucesso!");
-					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarroHorario(minuto, hora, dia, mes, ano));
+					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarroHorario(data));
 					vagas[escolhaCarro] = null;
 					break;
 				default:
@@ -389,23 +403,43 @@ public class Principal {
 		}
 	}
 
-	public static void verHistorico(ArrayList<Carro> historico) {
+	public static void verHistorico(Carro[] vagas, ArrayList<Carro> historico) {
+		Scanner scanner = new Scanner(System.in);
 		System.out.println("\n--- Historico ---");
-		for (Carro carro : historico) {
-			System.out.println("Modelo: " + carro.getModelo());
-			System.out.println("Placa: " + carro.getPlaca());
-			System.out.println("Hora de entrada: " + carro.getHoraEntrada() + "\n");
+		System.out.println("Qual data deseja consultar?");
+		System.out.print("Dia (dia/mes/ano): ");
+		String data = scanner.nextLine();
+		for (Carro carro : vagas) {
+			if (carro != null)
+				if (carro.temHoraSaida()) {
+					String dataSaida = carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+					if (data.equals(dataSaida)) {
+						System.out.println("\nPlaca: " + carro.getPlaca());
+						System.out.println("Modelo: " + carro.getModelo());
+						for (Marca marca : marcas) {
+							for (Modelo modelo : marca.getALModelo()) {
+								if (modelo.getModelo() == carro.getModelo())
+									System.out.println("Marca: " + marca.getMarca());
+							}
+						}
+						System.out.println("Entrada: " + carro.getHoraEntrada());
+						System.out.println("Saida: "
+								+ carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm")));
+						System.out.println("Valor pago: " + carro.getValor());
+					}
+				}
 		}
 	}
 
-	public static void mudarInfo(Carro[] vagas){
+	public static void mudarInfo(Carro[] vagas) {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("\n --- Mudar Informações ---");
 
-		for(int i = 0; i<100; i++){
-			if(vagas[i] != null){
-				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - " + vagas[i].getHoraEntrada());
+		for (int i = 0; i < 100; i++) {
+			if (vagas[i] != null) {
+				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - "
+						+ vagas[i].getHoraEntrada());
 			}
 		}
 		System.out.println("\nEscolha um carro:");
@@ -419,7 +453,7 @@ public class Principal {
 		System.out.print(">> ");
 		int escolha = sc.nextInt();
 		sc.nextLine();
-		switch (escolha){
+		switch (escolha) {
 			case 1:
 				System.out.println("Placa atual: " + vagas[escolhaCarro].getPlaca());
 				System.out.println("\nDigite a nova placa: ");
@@ -461,5 +495,5 @@ public class Principal {
 				break;
 		}
 	}
-}
 
+}
