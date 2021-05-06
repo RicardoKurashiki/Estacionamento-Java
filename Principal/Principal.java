@@ -31,7 +31,7 @@ public class Principal {
 		m2.addModeloNome("Duster");
 		m3.addModeloNome("Camaro");
 		m3.addModeloNome("Cruze");
-		m3.addModelo(new Modelo("BMW 320i"));
+		m4.addModelo(new Modelo("BMW 320i"));
 
 		marcas.add(m1);
 		marcas.add(m2);
@@ -132,8 +132,6 @@ public class Principal {
 
 			for(int j = 0; vagas[j] != null; j+=1){
 				posVazia += 1;
-				System.out.println(posVazia);
-				j += 1;
 			}
 
 			System.out.println("\nTotal de vagas vazias: " + emptyVagas);
