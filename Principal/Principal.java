@@ -178,6 +178,7 @@ public class Principal {
 							marcaSel.addModeloNome(nomeMod);
 							System.out.println("\nModelo adicionado: " + nomeMod);
 						} else {
+							// Placa
 							System.out.println("\n--- Digite a placa do carro ---");
 							System.out.print(">> ");
 							scanner.nextLine();
@@ -232,6 +233,7 @@ public class Principal {
 							marcaSel.addModeloNome(nomeMod);
 							System.out.println("\nModelo adicionado: " + nomeMod);
 						} else {
+							// Placa
 							System.out.println("\n--- Digite a placa do carro ---");
 							System.out.print(">> ");
 							scanner.nextLine();
