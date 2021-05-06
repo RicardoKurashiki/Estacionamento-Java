@@ -2,7 +2,7 @@ package Modelagem;
 
 import java.time.LocalDateTime;
 
-import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.*;
 
 public class Carro {
 
@@ -104,17 +104,13 @@ public class Carro {
 	public float saidaCarroHorario(int segundo, int minuto, int hora, int dia, int mes, int ano) {
 		float valor = 0;
 		this.saida = LocalDateTime.of(ano, mes, dia, hora, minuto, segundo);
-		float horas = entrada.until(saida, HOURS);
-		System.out.println("HORA ATUAL: " + this.entrada);
-		System.out.println("HORA SAIDA: " + this.saida);
-		System.out.println("HORAS: " + horas);
-		if (horas <= 1) {
+		long periodo = entrada.until(saida, MINUTES);
+		if (periodo <= 60) {
 			valor = 10;
 		}
-		if (horas > 1) {
-			horas -= 1;
-			float minutos = horas * 60;
-			valor = 10 + ((minutos / 15) * 2);
+		if (periodo > 60) {
+			periodo -= 60;
+			valor = 10 + ((periodo / 15) * 2);
 		}
 		return valor;
 	}

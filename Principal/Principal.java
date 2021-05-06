@@ -153,6 +153,7 @@ public class Principal {
 		System.out.println("<2> Registrar saida especificando horario");
 		System.out.println("<0> Voltar ao menu");
 		System.out.print(">> ");
+		// Saída testada, mudei a comparação de horas para a comparação de minutos e deu certo, agora fazer o menu
 		int opcao = scanner.nextInt();
 		if (opcao != 0) {
 			switch (opcao) {
@@ -160,7 +161,7 @@ public class Principal {
 					System.out.println("Valor total: RS" + carro.saidaCarro());
 					break;
 				case 2:
-					System.out.println("Valor total: RS" + carro.saidaCarroHorario(0, 0, 21, 05, 05, 2021));
+					System.out.println("Valor total: RS" + carro.saidaCarroHorario(0, 33, 10, 06, 05, 2021));
 					break;
 				default:
 					System.out.println("Escolha invalida!");
