@@ -101,7 +101,7 @@ public class Carro {
 	}
 	// -> Getter da hora de entrada
 	public String getHoraEntrada() {
-		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, hh:mm"));
+		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, hh:mm a"));
 	}
 
 	public float saidaCarro() {
@@ -121,9 +121,9 @@ public class Carro {
 		return valor;
 	}
 
-	public float saidaCarroHorario(int segundo, int minuto, int hora, int dia, int mes, int ano) {
+	public float saidaCarroHorario(int minuto, int hora, int dia, int mes, int ano) {
 		float valor = 0;
-		this.saida = LocalDateTime.of(ano, mes, dia, hora, minuto, segundo);
+		this.saida = LocalDateTime.of(ano, mes, dia, hora, minuto);
 		long periodo = entrada.until(saida, MINUTES);
 		if (periodo <= 60) {
 			valor = 10;

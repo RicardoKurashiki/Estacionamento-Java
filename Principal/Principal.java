@@ -62,7 +62,7 @@ public class Principal {
 					break;
 				case 2:
 					// -> Saida do carro
-					menuSaida();
+					menuSaida(vagas);
 					break;
 				case 3:
 					// -> Todas as placas
@@ -140,7 +140,27 @@ public class Principal {
 					historico.add(vagas[i]);
 					break;
 				case 2:
-
+					System.out.print("Placa do carro: ");
+					placa = scanner.nextLine();
+					System.out.print("Modelo do carro: ");
+					modelo = scanner.nextLine();
+					System.out.print("Dia: ");
+					int dia = scanner.nextInt();
+					System.out.print("Mês: ");
+					int mes = scanner.nextInt();
+					System.out.print("Ano: ");
+					int ano = scanner.nextInt();
+					System.out.print("Hora: ");
+					int hora = scanner.nextInt();
+					System.out.print("Minuto: ");
+					int minuto = scanner.nextInt();
+					vagas[i] = new Carro(modelo, placa, hora, minuto, dia, mes, ano);
+					System.out.println("\nEntrada registrada!");
+					System.out.println("Placa do Carro: " + vagas[i].getPlaca());
+					System.out.println("Modelo do Carro: " + vagas[i].getModelo());
+					System.out.println("Hora de entrada: " + vagas[i].getHoraEntrada());
+					// TODO -> Pedir para criar modelo
+					historico.add(vagas[i]);
 					break;
 				default:
 					System.out.println("Escolha invalida!");
@@ -151,24 +171,51 @@ public class Principal {
 		}
 	}
 
-	public static void menuSaida() {
-		Carro carro = new Carro("ABC-1234");
+	public static void menuSaida(Carro[] vagas) {
 		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("\n--- Selecionar Carro ---");
+
+		for(int i = 0; i<100; i++){
+			if(vagas[i] != null){
+				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - " + vagas[i].getHoraEntrada());
+			}
+		}
+
+		System.out.println("\nEscolha um carro:");
+		System.out.print(">> ");
+		int escolhaCarro = scanner.nextInt();
+
 		System.out.println("\n--- Saida ---");
 		System.out.println("<1> Registrar saida sem especificar horario");
 		System.out.println("<2> Registrar saida especificando horario");
 		System.out.println("<0> Voltar ao menu");
+		System.out.println("\nEscolha uma opção: ");
 		System.out.print(">> ");
-		// Saída testada, mudei a comparação de horas para a comparação de minutos e deu
-		// certo, agora fazer o menu
-		int opcao = scanner.nextInt();
-		if (opcao != 0) {
-			switch (opcao) {
+		int escolhaHorario = scanner.nextInt();
+
+		if (escolhaHorario != 0) {
+			switch (escolhaHorario) {
 				case 1:
-					System.out.println("Valor total: RS" + carro.saidaCarro());
+					System.out.println("\nCarro removido com sucesso!");
+					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarro());
+					vagas[escolhaCarro] = null;
 					break;
 				case 2:
-					System.out.println("Valor total: RS" + carro.saidaCarroHorario(0, 33, 10, 06, 05, 2021));
+					System.out.println("\nEspecifique o horário:");
+					System.out.print("Dia: ");
+					int dia = scanner.nextInt();
+					System.out.print("Mês: ");
+					int mes = scanner.nextInt();
+					System.out.print("Ano: ");
+					int ano = scanner.nextInt();
+					System.out.print("Hora: ");
+					int hora = scanner.nextInt();
+					System.out.print("Minuto: ");
+					int minuto = scanner.nextInt();
+					System.out.println("\nCarro removido com sucesso!");
+					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarroHorario(minuto, hora, dia, mes, ano));
+					vagas[escolhaCarro] = null;
 					break;
 				default:
 					System.out.println("Escolha invalida!");
@@ -254,29 +301,32 @@ public class Principal {
 			System.out.println("Hora de entrada: " + carro.getHoraEntrada() + "\n");
 		}
 	}
+
 	public static void mudarInfo(Carro[] vagas){
 		Scanner sc = new Scanner(System.in);
-		int i = 0;
+
 		System.out.println("\n --- Mudar Informações ---");
-		while (vagas[i] != null){
-			System.out.println("<" + i + ">" + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - " + vagas[i].getHoraEntrada());
-			i += 1;
+
+		for(int i = 0; i<100; i++){
+			if(vagas[i] != null){
+				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - " + vagas[i].getHoraEntrada());
+			}
 		}
-		System.out.println("\nEscolha um carro:\n");
+		System.out.println("\nEscolha um carro:");
 		System.out.print(">> ");
 		int escolhaCarro = sc.nextInt();
 		System.out.println("\n--- Qual informação deseja mudar ---");
 		System.out.println("<1> Placa");
 		System.out.println("<2> Modelo");
 		System.out.println("<3> Horário de entrada");
-		System.out.println("\nEscolha a opção:\n");
+		System.out.println("\nEscolha a opção:");
 		System.out.print(">> ");
 		int escolha = sc.nextInt();
 		sc.nextLine();
 		switch (escolha){
 			case 1:
 				System.out.println("Placa atual: " + vagas[escolhaCarro].getPlaca());
-				System.out.println("Digite a nova placa: ");
+				System.out.println("\nDigite a nova placa: ");
 				System.out.print(">> ");
 				String placaNova = sc.nextLine();
 				vagas[escolhaCarro].setPlaca(placaNova);
@@ -285,7 +335,7 @@ public class Principal {
 				break;
 			case 2:
 				System.out.println("Modelo atual: " + vagas[escolhaCarro].getModelo());
-				System.out.println("Digite o novo modelo: ");
+				System.out.println("\nDigite o novo modelo: ");
 				System.out.print(">> ");
 				String modeloNovo = sc.nextLine();
 				vagas[escolhaCarro].setModelo(modeloNovo);
@@ -294,18 +344,24 @@ public class Principal {
 				break;
 			case 3:
 				System.out.println("Horário de entrada atual: " + vagas[escolhaCarro].getHoraEntrada());
-				System.out.println("Digite o novo horário: ");
-				System.out.print(">> ");
-				// To com preguiça de fazer ainda
-				int ano = 0;
-				int mes = 0;
-				int dia = 0;
-				int hora = 0;
-				int minuto = 0;
-				// Mudar depois
+				System.out.println("\nDigite o novo horário: ");
+				System.out.print("Dia: ");
+				int dia = sc.nextInt();
+				System.out.print("Mês: ");
+				int mes = sc.nextInt();
+				System.out.print("Ano: ");
+				int ano = sc.nextInt();
+				System.out.print("Hora: ");
+				int hora = sc.nextInt();
+				System.out.print("Minuto: ");
+				int minuto = sc.nextInt();
+
 				vagas[escolhaCarro].setHoraEntrada(ano, mes, dia, hora, minuto);
 				System.out.println("\nHorário modificado com sucesso!");
 				System.out.println("Novo horário: " + vagas[escolhaCarro].getHoraEntrada());
+				break;
+			default:
+				System.out.println("Digite uma opção válida!");
 				break;
 		}
 	}
