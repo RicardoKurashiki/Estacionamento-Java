@@ -106,6 +106,11 @@ public class Carro {
 		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm"));
 	}
 
+	// -> Getter do valor pago
+	public float getValor() {
+		return valor;
+	}
+
 	public float saidaCarro() {
 		float valor = 0;
 		// Estabelece o LocalDateTime saída como now()
@@ -141,14 +146,6 @@ public class Carro {
 
 	public LocalDateTime getHoraSaida() {
 		return saida;
-	}
-
-	public float getValor() {
-		return valor;
-	}
-
-	public boolean temHoraSaida() {
-		return (saida != null);
 	}
 
 }

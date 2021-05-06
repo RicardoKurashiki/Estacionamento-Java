@@ -60,6 +60,11 @@ public class Principal {
 		vagas[4] = c5;
 		vagas[5] = c6;
 
+		historico.add(c1);
+		historico.add(c4);
+		historico.add(c5);
+		historico.add(c6);
+
 		// -> Criacao de variaveis
 		boolean appOn = true;
 		Scanner scanner = new Scanner(System.in);
@@ -196,7 +201,6 @@ public class Principal {
 							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
 							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
 							System.out.println("Hora de entrada: " + vagas[posVazia].getHoraEntrada());
-							// historico.add(vagas[posVazia]);
 						}
 					}
 					break;
@@ -264,7 +268,6 @@ public class Principal {
 							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
 							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
 							System.out.println("Hora de entrada: " + vagas[posVazia].getHoraEntrada());
-							historico.add(vagas[posVazia]);
 						}
 					}
 					break;
@@ -307,6 +310,7 @@ public class Principal {
 				case 1:
 					System.out.println("\nCarro removido com sucesso!");
 					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarro());
+					historico.add(vagas[escolhaCarro]);
 					vagas[escolhaCarro] = null;
 					break;
 				case 2:
@@ -325,6 +329,7 @@ public class Principal {
 					LocalDateTime data = LocalDateTime.of(ano, mes, dia, hora, minuto);
 					System.out.println("\nCarro removido com sucesso!");
 					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarroHorario(data));
+					historico.add(vagas[escolhaCarro]);
 					vagas[escolhaCarro] = null;
 					break;
 				default:
@@ -409,25 +414,22 @@ public class Principal {
 		System.out.println("Qual data deseja consultar?");
 		System.out.print("Dia (dia/mes/ano): ");
 		String data = scanner.nextLine();
-		for (Carro carro : vagas) {
-			if (carro != null)
-				if (carro.temHoraSaida()) {
-					String dataSaida = carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-					if (data.equals(dataSaida)) {
-						System.out.println("\nPlaca: " + carro.getPlaca());
-						System.out.println("Modelo: " + carro.getModelo());
-						for (Marca marca : marcas) {
-							for (Modelo modelo : marca.getALModelo()) {
-								if (modelo.getModelo() == carro.getModelo())
-									System.out.println("Marca: " + marca.getMarca());
-							}
-						}
-						System.out.println("Entrada: " + carro.getHoraEntrada());
-						System.out.println("Saida: "
-								+ carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm")));
-						System.out.println("Valor pago: " + carro.getValor());
+		for (Carro carro : historico) {
+			String dataSaida = carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			if (data.equals(dataSaida)) {
+				System.out.println("\nPlaca: " + carro.getPlaca());
+				System.out.println("Modelo: " + carro.getModelo());
+				for (Marca marca : marcas) {
+					for (Modelo modelo : marca.getALModelo()) {
+						if (modelo.getModelo() == carro.getModelo())
+							System.out.println("Marca: " + marca.getMarca());
 					}
 				}
+				System.out.println("Entrada: " + carro.getHoraEntrada());
+				System.out.println(
+						"Saida: " + carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,HH:mm")));
+				System.out.println("Valor pago: " + carro.getValor());
+			}
 		}
 	}
 
@@ -497,3 +499,37 @@ public class Principal {
 	}
 
 }
+
+// String dataSaida =
+// carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+// if (data.equals(dataSaida)) {
+// System.out.println("\nPlaca: " + carro.getPlaca());
+// System.out.println("Modelo: " + carro.getModelo());
+// for (Marca marca : marcas) {
+// for (Modelo modelo : marca.getALModelo()) {
+// if (modelo.getModelo() == carro.getModelo())
+// System.out.println("Marca: " + marca.getMarca());
+// }
+// }
+// System.out.println("Entrada: " + carro.getHoraEntrada());
+// System.out.println("Saida: "
+// + carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,
+// HH:mm")));
+// System.out.println("Valor pago: " + carro.getValor());
+// }// String dataSaida =
+// carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+// if (data.equals(dataSaida)) {
+// System.out.println("\nPlaca: " + carro.getPlaca());
+// System.out.println("Modelo: " + carro.getModelo());
+// for (Marca marca : marcas) {
+// for (Modelo modelo : marca.getALModelo()) {
+// if (modelo.getModelo() == carro.getModelo())
+// System.out.println("Marca: " + marca.getMarca());
+// }
+// }
+// System.out.println("Entrada: " + carro.getHoraEntrada());
+// System.out.println("Saida: "
+// + carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,
+// HH:mm")));
+// System.out.println("Valor pago: " + carro.getValor());
+// }
