@@ -76,9 +76,18 @@ public class Carro {
 		this.entrada = LocalDateTime.of(ano, mes, dia, hora, minuto);
 	}
 
+	// -> Setter de placa
+	public void setPlaca(String placaNova){
+		this.placa = placaNova;
+	}
 	// -> Getter da placa
 	public String getPlaca() {
 		return placa;
+	}
+
+	// -> Setter do modelo
+	public void setModelo(String setmodelo){
+		this.modelo = new Modelo(setmodelo);
 	}
 
 	// -> Getter do modelo
@@ -86,6 +95,10 @@ public class Carro {
 		return modelo.getModelo();
 	}
 
+	// -> Setter de hora de entrada
+	public void setHoraEntrada(int ano, int mes, int dia, int hora, int minuto){
+		this.entrada = LocalDateTime.of(ano, mes, dia, hora, minuto);
+	}
 	// -> Getter da hora de entrada
 	public String getHoraEntrada() {
 		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, hh:mm"));

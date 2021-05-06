@@ -8,6 +8,8 @@ import Modelagem.Carro;
 import Modelagem.Marca;
 import Modelagem.Modelo;
 
+import javax.sound.midi.Soundbank;
+
 public class Principal {
 	private static Carro[] vagas = new Carro[100];
 	private static ArrayList<Marca> marcas = new ArrayList<Marca>();
@@ -74,6 +76,10 @@ public class Principal {
 					// -> Historico
 					verHistorico(historico);
 					break;
+				case 6:
+					// -> Mudar informações de algum carro
+					mudarInfo(vagas);
+					break;
 				case 0:
 					// ->Sair do menu
 					appOn = false;
@@ -94,6 +100,7 @@ public class Principal {
 		System.out.println("<3> Ver todos os carros");
 		System.out.println("<4> Pesquisar por marca/modelo");
 		System.out.println("<5> Ver historico de movimentacoes");
+		System.out.println("<6> Alterar dados dos carros");
 		System.out.println("<0> Sair do aplicativo");
 		System.out.print(">> ");
 		return scanner.nextInt();
@@ -122,9 +129,12 @@ public class Principal {
 				case 1:
 					System.out.print("Placa do carro: ");
 					String placa = scanner.nextLine();
-					vagas[i] = new Carro(placa);
+					System.out.print("Modelo do carro: ");
+					String modelo = scanner.nextLine();
+					vagas[i] = new Carro(modelo, placa);
 					System.out.println("\nEntrada registrada!");
 					System.out.println("Placa do Carro: " + vagas[i].getPlaca());
+					System.out.println("Modelo do Carro: " + vagas[i].getModelo());
 					System.out.println("Hora de entrada: " + vagas[i].getHoraEntrada());
 					// TODO -> Pedir para criar modelo
 					historico.add(vagas[i]);
@@ -244,5 +254,60 @@ public class Principal {
 			System.out.println("Hora de entrada: " + carro.getHoraEntrada() + "\n");
 		}
 	}
-
+	public static void mudarInfo(Carro[] vagas){
+		Scanner sc = new Scanner(System.in);
+		int i = 0;
+		System.out.println("\n --- Mudar Informações ---");
+		while (vagas[i] != null){
+			System.out.println("<" + i + ">" + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - " + vagas[i].getHoraEntrada());
+			i += 1;
+		}
+		System.out.println("\nEscolha um carro:\n");
+		System.out.print(">> ");
+		int escolhaCarro = sc.nextInt();
+		System.out.println("\n--- Qual informação deseja mudar ---");
+		System.out.println("<1> Placa");
+		System.out.println("<2> Modelo");
+		System.out.println("<3> Horário de entrada");
+		System.out.println("\nEscolha a opção:\n");
+		System.out.print(">> ");
+		int escolha = sc.nextInt();
+		sc.nextLine();
+		switch (escolha){
+			case 1:
+				System.out.println("Placa atual: " + vagas[escolhaCarro].getPlaca());
+				System.out.println("Digite a nova placa: ");
+				System.out.print(">> ");
+				String placaNova = sc.nextLine();
+				vagas[escolhaCarro].setPlaca(placaNova);
+				System.out.println("\nPlaca alterada com sucesso!");
+				System.out.print("Nova placa: " + vagas[escolhaCarro].getPlaca());
+				break;
+			case 2:
+				System.out.println("Modelo atual: " + vagas[escolhaCarro].getModelo());
+				System.out.println("Digite o novo modelo: ");
+				System.out.print(">> ");
+				String modeloNovo = sc.nextLine();
+				vagas[escolhaCarro].setModelo(modeloNovo);
+				System.out.println("\nPlaca alterada com sucesso!");
+				System.out.println("Novo modelo: " + vagas[escolhaCarro].getModelo());
+				break;
+			case 3:
+				System.out.println("Horário de entrada atual: " + vagas[escolhaCarro].getHoraEntrada());
+				System.out.println("Digite o novo horário: ");
+				System.out.print(">> ");
+				// To com preguiça de fazer ainda
+				int ano = 0;
+				int mes = 0;
+				int dia = 0;
+				int hora = 0;
+				int minuto = 0;
+				// Mudar depois
+				vagas[escolhaCarro].setHoraEntrada(ano, mes, dia, hora, minuto);
+				System.out.println("\nHorário modificado com sucesso!");
+				System.out.println("Novo horário: " + vagas[escolhaCarro].getHoraEntrada());
+				break;
+		}
+	}
 }
+
