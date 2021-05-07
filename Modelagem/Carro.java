@@ -112,36 +112,43 @@ public class Carro {
 	}
 
 	public float saidaCarro() {
-		float valor = 0;
 		// Estabelece o LocalDateTime saída como now()
 		this.saida = LocalDateTime.now();
-		float horas = entrada.until(saida, HOURS);
-		if (horas <= 1) {
-			valor = 10;
+		float periodo = entrada.until(saida, MINUTES);
+		if (periodo <= 60) {
+			this.valor = 10;
 		}
-		if (horas > 1) {
-			horas -= 1;
-			float minutos = horas * 60;
-			valor = 10 + ((minutos / 15) * 2);
+		if (periodo > 60) {
+			periodo -= 60;
+			this.valor = 10 + ((periodo / 15) * 2);
 		}
-		// Calcula valor com a diferença entre o tempo de registro e o tempo de saida
-		this.valor = valor;
 		return valor;
 	}
 
 	public float saidaCarroHorario(LocalDateTime data) {
-		float valor = 0;
 		this.saida = data;
-		long periodo = entrada.until(saida, MINUTES);
+		float periodo = entrada.until(saida, MINUTES);
 		if (periodo <= 60) {
-			valor = 10;
+			this.valor = 10;
 		}
 		if (periodo > 60) {
 			periodo -= 60;
-			valor = 10 + ((periodo / 15) * 2);
+			this.valor = 10 + ((periodo / 15) * 2);
 		}
-		this.valor = valor;
-		return valor;
+		return this.valor;
+	}
+
+	public float saidaCarroHorarioInt(int dia, int mes, int ano, int hora, int minuto) {
+		this.saida = LocalDateTime.of(ano, mes, dia, hora, minuto);
+		float periodo = entrada.until(saida, MINUTES);
+		if (periodo <= 60) {
+			this.valor = 10;
+		}
+		if (periodo > 60) {
+			periodo -= 60;
+			this.valor = 10 + ((periodo / 15) * 2);
+		}
+		return this.valor;
 	}
 
 	public LocalDateTime getHoraSaida() {

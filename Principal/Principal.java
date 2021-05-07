@@ -136,9 +136,11 @@ public class Principal {
 			System.out.println("<0> Voltar ao menu");
 			System.out.print(">> ");
 			opcao = scanner.nextInt();
-			if (opcao >= 0 && opcao < 3)
+			if (opcao >= 0 && opcao < 3) {
 				invalidInput = false;
-			System.out.println("\nValor incorreto! Tente novamente.");
+			} else {
+				System.out.println("\nValor incorreto! Tente novamente.");
+			}
 		}
 		if (opcao != 0) {
 			for (Carro carro : vagas) {
@@ -155,6 +157,8 @@ public class Principal {
 			System.out.println("\nTotal de vagas vazias: " + emptyVagas);
 			scanner.nextLine();
 			switch (opcao) {
+				case 0:
+					break;
 				case 1:
 					// Marca
 					System.out.println("\n--- Selecione a marca do carro ---");
@@ -255,20 +259,35 @@ public class Principal {
 							System.out.print(">> ");
 							scanner.nextLine();
 							String placa = scanner.nextLine();
+
+							// Horário
+							// Verificação e confirmação do horário
 							System.out.println("\n--- Digite o horário de entrada ---");
 							System.out.print("Dia (dia/mes/ano): ");
 							String diaInteiro = scanner.nextLine();
+							String[] valoresDia = diaInteiro.split("/");
+
+							if (valoresDia.length != 3){
+								System.out.println("\nDigite a data no formato correto!");
+								return;
+							} else {
+								dia = Integer.parseInt(valoresDia[0]);
+								mes = Integer.parseInt(valoresDia[1]);
+								ano = Integer.parseInt(valoresDia[2]);
+							}
+
+							// Verificação e confirmação do horário
 							System.out.print("Horario (hora:minuto - 24h): ");
 							String horaInteira = scanner.nextLine();
-							String[] valoresDia = diaInteiro.split("/");
 							String[] valoresHora = horaInteira.split(":");
-							dia = Integer.parseInt(valoresDia[0]);
-							mes = Integer.parseInt(valoresDia[1]);
-							ano = Integer.parseInt(valoresDia[2]);
-							hora = Integer.parseInt(valoresHora[0]);
-							minuto = Integer.parseInt(valoresHora[1]);
-							LocalDateTime data = LocalDateTime.of(ano, mes, dia, hora, minuto);
-							vagas[posVazia] = new Carro(modelosMarca.get(escModelo), placa, data);
+							if (valoresHora.length != 2){
+								System.out.println("\nDigite o horário no formato correto!");
+								return;
+							} else {
+								hora = Integer.parseInt(valoresHora[0]);
+								minuto = Integer.parseInt(valoresHora[1]);
+							}
+							vagas[posVazia] = new Carro(modelosMarca.get(escModelo), placa, hora, minuto, dia, mes, ano);
 							System.out.println("\nEntrada registrada!");
 							System.out.println("Placa do Carro: " + vagas[posVazia].getPlaca());
 							System.out.println("Modelo do Carro: " + vagas[posVazia].getModelo());
@@ -290,10 +309,10 @@ public class Principal {
 		int dia, mes, ano, hora, minuto;
 
 		System.out.println("\n--- Selecionar Carro ---");
-
+		System.out.println("<0> Voltar ao menu");
 		for (int i = 0; i < 100; i++) {
 			if (vagas[i] != null) {
-				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - "
+				System.out.println("<" + (i+1) + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - "
 						+ vagas[i].getHoraEntrada());
 			}
 		}
@@ -301,6 +320,12 @@ public class Principal {
 		System.out.println("\nEscolha um carro:");
 		System.out.print(">> ");
 		int escolhaCarro = scanner.nextInt();
+
+		if (escolhaCarro == 0) {
+			return;
+		} else {
+			escolhaCarro -= 1;
+		}
 
 		System.out.println("\n--- Saida ---");
 		System.out.println("<1> Registrar saida sem especificar horario");
@@ -320,20 +345,35 @@ public class Principal {
 					break;
 				case 2:
 					System.out.println("\nEspecifique o horário:");
+
+					// -> Escaneando e confirmando a data
 					System.out.print("Dia (dia/mes/ano): ");
 					String diaInteiro = scanner.nextLine();
+					String[] valoresDia = diaInteiro.split("/");
+					if (valoresDia.length != 3){
+						System.out.println("\nDigite a data no formato correto!");
+						break;
+					} else {
+						dia = Integer.parseInt(valoresDia[0]);
+						mes = Integer.parseInt(valoresDia[1]);
+						ano = Integer.parseInt(valoresDia[2]);
+					}
+
+					// -> Escaneando e confirmando a hora
 					System.out.print("Horario (hora:minuto - 24h): ");
 					String horaInteira = scanner.nextLine();
-					String[] valoresDia = diaInteiro.split("/");
 					String[] valoresHora = horaInteira.split(":");
-					dia = Integer.parseInt(valoresDia[0]);
-					mes = Integer.parseInt(valoresDia[1]);
-					ano = Integer.parseInt(valoresDia[2]);
-					hora = Integer.parseInt(valoresHora[0]);
-					minuto = Integer.parseInt(valoresHora[1]);
-					LocalDateTime data = LocalDateTime.of(ano, mes, dia, hora, minuto);
+
+					if (valoresHora.length != 2){
+						System.out.println("\nDigite o horário no formato correto!");
+						break;
+					} else {
+						hora = Integer.parseInt(valoresHora[0]);
+						minuto = Integer.parseInt(valoresHora[1]);
+					}
+
 					System.out.println("\nCarro removido com sucesso!");
-					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarroHorario(data));
+					System.out.println("Valor total: RS" + vagas[escolhaCarro].saidaCarroHorarioInt(dia, mes, ano, hora, minuto));
 					historico.add(vagas[escolhaCarro]);
 					vagas[escolhaCarro] = null;
 					break;
@@ -414,14 +454,24 @@ public class Principal {
 	}
 
 	public static void verRelatorio(Carro[] vagas, ArrayList<Carro> historico) {
+		boolean temRegistro = false;
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("\n--- Relatorio ---");
 		System.out.println("Qual data deseja consultar?");
 		System.out.print("Dia (dia/mes/ano): ");
 		String data = scanner.nextLine();
+
+		// -> Verificação do formato da data
+		String[] valoresDia = data.split("/");
+		if (valoresDia.length != 3){
+			System.out.println("\nDigite a data no formato correto!");
+			return;
+		}
+
 		for (Carro carro : historico) {
 			String dataSaida = carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			if (data.equals(dataSaida)) {
+				temRegistro = true;
 				System.out.println("\n--- Carro n" + (historico.indexOf(carro) + 1) + " ---");
 				System.out.println("Placa: " + carro.getPlaca());
 				System.out.println("Modelo: " + carro.getModelo());
@@ -437,26 +487,35 @@ public class Principal {
 				System.out.println("Valor pago: " + carro.getValor());
 			}
 		}
+		if (!temRegistro){
+			System.out.println("\nNenhum registro na data selecionada.");
+		}
 	}
 
 	public static void mudarInfo(Carro[] vagas) {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("\n --- Mudar Informações ---");
-
+		System.out.println("<0> Voltar ao menu");
 		for (int i = 0; i < 100; i++) {
 			if (vagas[i] != null) {
-				System.out.println("<" + i + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - "
+				System.out.println("<" + (i+1) + "> " + vagas[i].getPlaca() + " - " + vagas[i].getModelo() + " - "
 						+ vagas[i].getHoraEntrada());
 			}
 		}
-		System.out.println("\nEscolha um carro:");
+		System.out.println("\nEscolha uma opção:");
 		System.out.print(">> ");
 		int escolhaCarro = sc.nextInt();
+		if (escolhaCarro == 0){
+			return;
+		} else {
+			escolhaCarro -= 1;
+		}
 		System.out.println("\n--- Qual informação deseja mudar ---");
 		System.out.println("<1> Placa");
 		System.out.println("<2> Modelo");
 		System.out.println("<3> Horário de entrada");
+		System.out.println("<4> Voltar ao menu");
 		System.out.println("\nEscolha a opção:");
 		System.out.print(">> ");
 		int escolha = sc.nextInt();
@@ -481,27 +540,44 @@ public class Principal {
 				System.out.println("Novo modelo: " + vagas[escolhaCarro].getModelo());
 				break;
 			case 3:
-				System.out.println("Horário de entrada atual: " + vagas[escolhaCarro].getHoraEntrada());
-				System.out.println("\nDigite o novo horário: ");
-				System.out.print("Dia: ");
-				int dia = sc.nextInt();
-				System.out.print("Mês: ");
-				int mes = sc.nextInt();
-				System.out.print("Ano: ");
-				int ano = sc.nextInt();
-				System.out.print("Hora: ");
-				int hora = sc.nextInt();
-				System.out.print("Minuto: ");
-				int minuto = sc.nextInt();
+				int dia, mes, ano, hora, minuto = 0;
+				System.out.println("\nHorário de entrada atual: " + vagas[escolhaCarro].getHoraEntrada());
+				System.out.print("Nova data (dia/mes/ano): ");
+				String diaInteiro = sc.nextLine();
+				String[] valoresDia = diaInteiro.split("/");
 
+				// Verificação e confirmação da data
+				if (valoresDia.length != 3){
+					System.out.println("\nDigite a data no formato correto!");
+					return;
+				} else {
+					dia = Integer.parseInt(valoresDia[0]);
+					mes = Integer.parseInt(valoresDia[1]);
+					ano = Integer.parseInt(valoresDia[2]);
+				}
+
+				// Verificação e confirmação do horário
+				System.out.print("Novo horário (hora:minuto - 24h): ");
+				String horaInteira = sc.nextLine();
+				String[] valoresHora = horaInteira.split(":");
+				if (valoresHora.length != 2){
+					System.out.println("\nDigite o horário no formato correto!");
+					return;
+				} else {
+					hora = Integer.parseInt(valoresHora[0]);
+					minuto = Integer.parseInt(valoresHora[1]);
+				}
+
+				// Registro do novo horário
 				vagas[escolhaCarro].setHoraEntrada(ano, mes, dia, hora, minuto);
 				System.out.println("\nHorário modificado com sucesso!");
 				System.out.println("Novo horário: " + vagas[escolhaCarro].getHoraEntrada());
+				break;
+			case 4:
 				break;
 			default:
 				System.out.println("Digite uma opção válida!");
 				break;
 		}
 	}
-
 }
