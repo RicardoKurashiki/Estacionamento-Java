@@ -39,15 +39,15 @@ public class Principal {
 
 		// -> Carros
 		Carro c1 = new Carro(new Modelo("Argo"), "ARG-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
-		c1.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 12, 30));
+		c1.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 19, 30));
 		Carro c2 = new Carro(new Modelo("Argo"), "ARG-0002");
 		Carro c3 = new Carro(new Modelo("Camaro"), "CAM-0001");
 		Carro c4 = new Carro(new Modelo("Kwid"), "KWD-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
-		c4.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 13, 30));
+		c4.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 10, 30));
 		Carro c5 = new Carro(new Modelo("Duster"), "DTR-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
-		c5.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 14, 30));
+		c5.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 15, 30));
 		Carro c6 = new Carro(new Modelo("Cruze"), "CRZ-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
-		c6.saidaCarroHorario(LocalDateTime.of(2021, 05, 04, 15, 30));
+		c6.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 21, 30));
 
 		vagas[0] = c1;
 		vagas[1] = c2;
@@ -456,6 +456,7 @@ public class Principal {
 	public static void verRelatorio(Carro[] vagas, ArrayList<Carro> historico) {
 		boolean temRegistro = false;
 		Scanner scanner = new Scanner(System.in);
+		ArrayList <Carro> carrosRegistro = new ArrayList<Carro>();
 		System.out.println("\n--- Relatorio ---");
 		System.out.println("Qual data deseja consultar?");
 		System.out.print("Dia (dia/mes/ano): ");
@@ -467,11 +468,23 @@ public class Principal {
 			System.out.println("\nDigite a data no formato correto!");
 			return;
 		}
+		// -> Algoritmo de organização para a ArrayList de registro
+		for (Carro carro : historico){
+			for (Carro comp : historico){
+				if(carro.getHoraSaida().isBefore(comp.getHoraSaida())){
+					Carro aux = carro;
+					historico.set(historico.indexOf(carro), comp);
+					historico.set(historico.indexOf(comp), aux);
+				}
+			}
+		}
 
+		// -> Printando carros com a data correspondente
 		for (Carro carro : historico) {
 			String dataSaida = carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			if (data.equals(dataSaida)) {
 				temRegistro = true;
+				// Print dos carros no carrosRegistro
 				System.out.println("\n--- Carro n" + (historico.indexOf(carro) + 1) + " ---");
 				System.out.println("Placa: " + carro.getPlaca());
 				System.out.println("Modelo: " + carro.getModelo());
@@ -482,11 +495,11 @@ public class Principal {
 					}
 				}
 				System.out.println("Entrada: " + carro.getHoraEntrada());
-				System.out.println(
-						"Saida: " + carro.getHoraSaida().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,HH:mm")));
+				System.out.println("Saida:" + carro.getHoraSaidaString());
 				System.out.println("Valor pago: " + carro.getValor());
 			}
 		}
+
 		if (!temRegistro){
 			System.out.println("\nNenhum registro na data selecionada.");
 		}

@@ -151,8 +151,9 @@ public class Carro {
 		return this.valor;
 	}
 
-	public LocalDateTime getHoraSaida() {
-		return saida;
+	public String getHoraSaidaString() {
+		return saida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm"));
 	}
+	public LocalDateTime getHoraSaida() { return saida; }
 
 }
