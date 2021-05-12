@@ -1,5 +1,6 @@
 package Principal;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDateTime;
@@ -38,15 +39,15 @@ public class Principal {
 		marcas.add(m4);
 
 		// -> Carros
-		Carro c1 = new Carro(new Modelo("Argo"), "ARG-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		Carro c1 = new Carro(new Modelo("Argo"), "ARG-0001", LocalDateTime.of(2021, 5, 3, 8, 45));
 		c1.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 19, 30));
 		Carro c2 = new Carro(new Modelo("Argo"), "ARG-0002");
 		Carro c3 = new Carro(new Modelo("Camaro"), "CAM-0001");
-		Carro c4 = new Carro(new Modelo("Kwid"), "KWD-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		Carro c4 = new Carro(new Modelo("Kwid"), "KWD-0001", LocalDateTime.of(2021, 5, 3, 6, 17));
 		c4.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 10, 30));
-		Carro c5 = new Carro(new Modelo("Duster"), "DTR-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		Carro c5 = new Carro(new Modelo("Duster"), "DTR-0001", LocalDateTime.of(2021, 5, 3, 10, 30));
 		c5.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 15, 30));
-		Carro c6 = new Carro(new Modelo("Cruze"), "CRZ-0001", LocalDateTime.of(2021, 5, 3, 9, 30));
+		Carro c6 = new Carro(new Modelo("Cruze"), "CRZ-0001", LocalDateTime.of(2021, 5, 3, 7, 00));
 		c6.saidaCarroHorario(LocalDateTime.of(2021, 05, 03, 21, 30));
 
 		vagas[0] = c1;
@@ -95,6 +96,14 @@ public class Principal {
 					// -> Mudar informações de algum carro
 					mudarInfo(vagas);
 					break;
+				case 7:
+					// -> Cadastrar marcas
+					cadastrarMarca();
+					break;
+				case 8:
+					// -> Cadastrar modelos em marcas
+					cadastrarModelo();
+					break;
 				case 0:
 					// ->Sair do menu
 					appOn = false;
@@ -116,6 +125,8 @@ public class Principal {
 		System.out.println("<4> Pesquisar por marca/modelo");
 		System.out.println("<5> Ver relatorio de movimentacoes");
 		System.out.println("<6> Alterar dados dos carros");
+		System.out.println("<7> Cadastrar nova marca");
+		System.out.println("<8> Cadastrar novo modelo");
 		System.out.println("<0> Sair do aplicativo");
 		System.out.print(">> ");
 		return scanner.nextInt();
@@ -456,7 +467,6 @@ public class Principal {
 	public static void verRelatorio(Carro[] vagas, ArrayList<Carro> historico) {
 		boolean temRegistro = false;
 		Scanner scanner = new Scanner(System.in);
-		ArrayList <Carro> carrosRegistro = new ArrayList<Carro>();
 		System.out.println("\n--- Relatorio ---");
 		System.out.println("Qual data deseja consultar?");
 		System.out.print("Dia (dia/mes/ano): ");
@@ -468,16 +478,8 @@ public class Principal {
 			System.out.println("\nDigite a data no formato correto!");
 			return;
 		}
-		// -> Algoritmo de organização para a ArrayList de registro
-		for (Carro carro : historico){
-			for (Carro comp : historico){
-				if(carro.getHoraSaida().isBefore(comp.getHoraSaida())){
-					Carro aux = carro;
-					historico.set(historico.indexOf(carro), comp);
-					historico.set(historico.indexOf(comp), aux);
-				}
-			}
-		}
+		// -> Organização da ArrayList historico com base na ordem natural
+		Collections.sort(historico);
 
 		// -> Printando carros com a data correspondente
 		for (Carro carro : historico) {
@@ -591,6 +593,77 @@ public class Principal {
 			default:
 				System.out.println("Digite uma opção válida!");
 				break;
+		}
+	}
+
+	public static void cadastrarMarca(){
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("\n--- Registro de Marcas ---");
+		System.out.println("\n- Marcas já registradas -\n");
+		for (Marca marca : marcas){
+			System.out.println(marca.getMarca());
+		}
+		System.out.println("\n<1> Cadastrar nova marca");
+		System.out.println("<0> Retornar ao menu");
+		System.out.println("\n- Selecione a opção: ");
+		System.out.print(">> ");
+		int opcao = scanner.nextInt();
+
+		switch (opcao) {
+			case 0:
+				break;
+			case 1:
+				System.out.println("\n- Digite o nome da marca que deseja adicionar: ");
+				System.out.print(">> ");
+				scanner.nextLine();
+				String nomeMarca = scanner.nextLine();
+				Marca novaMarca = new Marca(nomeMarca);
+				marcas.add(novaMarca);
+				System.out.println("\n" + novaMarca.getMarca() + " adicionada com sucesso!");
+				break;
+			default:
+				System.out.println("\nDigite uma opção válida!");
+				break;
+		}
+	}
+
+	public static void cadastrarModelo(){
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("\n--- Registro de Modelos ---");
+		System.out.println("\n- Selecione a marca que deseja adicionar o modelo -\n");
+		for (Marca marca : marcas){
+			System.out.println("<" + marcas.indexOf(marca) + "> " + marca.getMarca());
+		}
+		System.out.println("<"+ marcas.size() + "> Retornar ao menu");
+		System.out.println("\n- Selecione a opção: ");
+		System.out.print(">> ");
+		int opcaoMarca = scanner.nextInt();
+
+		if(opcaoMarca != marcas.size()) {
+			System.out.println("\n- Modelos já registrados em " + marcas.get(opcaoMarca).getMarca() + "-\n");
+			for (Modelo modelo : marcas.get(opcaoMarca).getALModelo()){
+				System.out.println(modelo.getModelo());
+			}
+			System.out.println("\n<1> Cadastrar novo modelo");
+			System.out.println("<0> Retornar ao menu");
+			System.out.println("\n- Selecione a opção: ");
+			System.out.print(">> ");
+			int opcaoMod = scanner.nextInt();
+			switch (opcaoMod) {
+				case 0:
+					break;
+				case 1:
+					System.out.println("\n- Digite o nome do modelo que deseja adicionar: ");
+					System.out.print(">> ");
+					scanner.nextLine();
+					String nomeModelo = scanner.nextLine();
+					marcas.get(opcaoMarca).addModeloNome(nomeModelo);
+					System.out.println("\n" + nomeModelo + " adicionado com sucesso em " + marcas.get(opcaoMarca).getMarca() + "!");
+					break;
+				default:
+					System.out.println("\nDigite uma opção válida!");
+					break;
+			}
 		}
 	}
 }

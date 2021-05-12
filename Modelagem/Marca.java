@@ -49,4 +49,8 @@ public class Marca {
 	public void addModelo(Modelo novoModelo) {
 		alModelo.add(novoModelo);
 	}
+
+	@Override
+
+	public String toString(){ return "Marca: " + nome + ", com os modelos: " + alModelo;}
 }

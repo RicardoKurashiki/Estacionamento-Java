@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 import static java.time.temporal.ChronoUnit.*;
 
-public class Carro {
+public class Carro implements Comparable<Carro>{
 
 	private Modelo modelo;
 	private String placa;
@@ -103,8 +103,10 @@ public class Carro {
 
 	// -> Getter da hora de entrada
 	public String getHoraEntrada() {
-		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm"));
+		return entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm a"));
 	}
+
+	public LocalDateTime getHoraEntradaLDT() {return entrada;}
 
 	// -> Getter do valor pago
 	public float getValor() {
@@ -154,6 +156,14 @@ public class Carro {
 	public String getHoraSaidaString() {
 		return saida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm"));
 	}
+
 	public LocalDateTime getHoraSaida() { return saida; }
 
+	@Override
+	public String toString() {return "Carro de placa: " + placa + ", de modelo: " + modelo + ", entrou no estacionamento às: " + entrada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm a"));}
+
+	@Override
+	public int compareTo(Carro outroCarro) {
+		return entrada.compareTo(outroCarro.getHoraEntradaLDT());
+	}
 }

@@ -22,4 +22,7 @@ public class Modelo {
 	public String getModelo() {
 		return nome;
 	}
+
+	@Override
+	public String toString() { return nome;}
 }
